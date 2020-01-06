@@ -1,1 +1,1 @@
-web: gunicorn mps:application
+web: gunicorn mps.wsgi
