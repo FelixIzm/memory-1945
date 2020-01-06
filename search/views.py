@@ -42,7 +42,7 @@ def make_str_cookie(cookies):
     return str_cook
 #####################################
 
-def getContent(military_unit, date_From,date_To):
+def getContent(military_unit):
     ##############################################
     #    Первый запрос - получаем 307 статус     #
     ##############################################
@@ -171,8 +171,8 @@ def getContent(military_unit, date_From,date_To):
 def index(request):
     if request.method == "POST":
         unit = request.POST.get("unit")
-        date_From = request.POST.get("date_From")
-        date_To = request.POST.get("date_To")
+        #date_From = request.POST.get("date_From")
+        #date_To = request.POST.get("date_To")
         # age = request.POST.get("age") # получение значения поля age
         #return HttpResponse("<h2>Hello, {0}</h2>".format(name))
         return HttpResponse(getContent(unit))
