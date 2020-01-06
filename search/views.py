@@ -111,7 +111,7 @@ def getContent(military_unit, date_From, date_To):
 
             #data_t= Template('{"query":{"bool":{"should":[{"bool":{"should":[{"match_phrase":{"document_type":"Боевые донесения, оперсводки"}},{"match_phrase":{"document_type":"Боевые приказы и распоряжения"}},{"match_phrase":{"document_type":"Отчеты о боевых действиях"}},{"match_phrase":{"document_type":"Переговоры"}},{"match_phrase":{"document_type":"Журналы боевых действий"}},{"match_phrase":{"document_type":"Директивы и указания"}},{"match_phrase":{"document_type":"Приказы"}},{"match_phrase":{"document_type":"Постановления"}},{"match_phrase":{"document_type":"Доклады"}},{"match_phrase":{"document_type":"Рапорты"}},{"match_phrase":{"document_type":"Разведывательные бюллетени и донесения"}},{"match_phrase":{"document_type":"Сведения"}},{"match_phrase":{"document_type":"Планы"}},{"match_phrase":{"document_type":"Планы операций"}},{"match_phrase":{"document_type":"Карты"}},{"match_phrase":{"document_type":"Схемы"}},{"match_phrase":{"document_type":"Справки"}},{"match_phrase":{"document_type":"Прочие документы"}}]}},{"bool":{"should":[{"bool":{"must":[{"range":{"date_from":{"lte":"${finish_date}"}}},{"range":{"date_to":{"gte":"${start_date}"}}}],"boost":3}},{"bool":{"must":[{"range":{"document_date_b":{"lte":"${finish_date}"}}},{"range":{"document_date_f":{"gte":"${start_date}"}}}],"boost":7}}]}}],"minimum_should_match":2}},"_source":["id","document_type","document_number","document_date_b","document_date_f","document_name","archive","fond","opis","delo","date_from","date_to","authors","geo_names","operation_name","secr","image_path","delo_id","deal_type","operation_name"],"size":"${size}","from":"${para_from}"}')
 
-            data_ = data_t.safe_substitute(start_date='1945-5-1',finish_date='1945-5-31', military_unit=military_unit,size=10,para_from=0)
+            data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=10,para_from=0)
             url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
             res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers)
             if(res4.status_code==200):
@@ -133,7 +133,7 @@ def getContent(military_unit, date_From, date_To):
 
                 while(x< one*divisor):
                     #print(divisor, x, total)
-                    data_ = data_t.safe_substitute(start_date='1945-5-1',finish_date='1945-5-31', military_unit=military_unit,size=divisor,para_from=x)
+                    data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=divisor,para_from=x)
                     url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
                     res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers)
                     if(res4.status_code==200):
@@ -147,7 +147,7 @@ def getContent(military_unit, date_From, date_To):
                             html_string += data_string
                     x+=divisor
                 #print(two, x)
-                data_ = data_t.safe_substitute(start_date='1945-5-1',finish_date='1945-5-31', military_unit=military_unit,size=two,para_from=x)
+                data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=two,para_from=x)
                 url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
                 res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers)
                 if(res4.status_code==200):
@@ -179,8 +179,8 @@ def index(request):
         date_To = tmp_date_To.strftime('%Y-%m-%d')
         # age = request.POST.get("age") # получение значения поля age
         #return HttpResponse("<h2>Hello, {0}</h2>".format(name))
-        return HttpResponse("<h2>date_From, {0}</h2>".format(date_From))
-        #return HttpResponse(getContent(unit,date_From, date_To))
+        #return HttpResponse("<h2>date_From, {0}</h2>".format(date_From))
+        return HttpResponse(getContent(unit,date_From, date_To))
     else:
         userform = UserForm()
         return render(request, "search/index.html", {"form": userform})
