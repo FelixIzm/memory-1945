@@ -4,7 +4,7 @@ from string import Template
 from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import UserForm
-
+from datetime import datetime
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -171,8 +171,12 @@ def getContent(military_unit, date_From, date_To):
 def index(request):
     if request.method == "POST":
         unit = request.POST.get("unit")
-        date_From = request.POST.get("date_From")
-        date_To = request.POST.get("date_To")
+        str_date_From = request.POST.get("date_From")
+        str_date_To = request.POST.get("date_To")
+        tmp_date_From = datetime.strptime(str_date_From,'%d.%m.%Y')
+        tmp_date_To = datetime.strptime(str_date_To,'%d.%m.%Y')
+        date_From = tmp_date_From.strftime('%Y-%m-%d')
+        date_To = tmp_date_To.strftime('%Y-%m-%d')
         # age = request.POST.get("age") # получение значения поля age
         #return HttpResponse("<h2>Hello, {0}</h2>".format(name))
         return HttpResponse("<h2>date_From, {0}</h2>".format(date_From))
