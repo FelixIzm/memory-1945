@@ -42,7 +42,7 @@ def make_str_cookie(cookies):
     return str_cook
 #####################################
 
-def getContent(military_unit):
+def getContent(military_unit, date_From, date_To):
     ##############################################
     #    Первый запрос - получаем 307 статус     #
     ##############################################
