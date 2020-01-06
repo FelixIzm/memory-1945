@@ -17,7 +17,7 @@ headers={}
 str_00 = 'bda88568a54f922fcdfc6dbf940e5d00'
 str_0b = '56105c9ab348522591eea18fbe4d080b'
 str_PNSESSIONID = 'PNSESSIONID'
-unit = '179 габр'
+unit = '1256 гап'
 
 #####################################
 def parse_file (name_file):
