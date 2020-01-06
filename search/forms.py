@@ -1,6 +1,6 @@
 from django import forms
 from datetime import date
-import datetime
+from datetime import datetime
 
 class UserForm(forms.Form):
     d_from = "01-01-1939"
