@@ -175,7 +175,7 @@ def index(request):
         date_To = request.POST.get("date_To")
         # age = request.POST.get("age") # получение значения поля age
         #return HttpResponse("<h2>Hello, {0}</h2>".format(name))
-        return HttpResponse(date_From.strftime('%Y-%m-%d'))
+        return HttpResponse("<h2>date_From, {0}</h2>".format(date_From.strftime('%Y-%m-%d')))
         #return HttpResponse(getContent(unit,date_From, date_To))
     else:
         userform = UserForm()
