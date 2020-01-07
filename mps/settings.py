@@ -31,7 +31,7 @@ DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
 
 #DEBUG = bool(os.environ['DJANGO_DEBUG'])
 
-ALLOWED_HOSTS = ['memory-1945.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = ['memory-1945.herokuapp.com','127.0.0.1','localhost']
 
 
 # Application definition
