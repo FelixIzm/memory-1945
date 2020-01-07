@@ -175,6 +175,7 @@ def getContent(military_unit, date_From, date_To):
 
 def index(request):
     if request.method == "POST":
+        userform = UserForm()
         unit = request.POST.get("unit")
         str_date_From = request.POST.get("date_From")
         str_date_To = request.POST.get("date_To")
@@ -185,7 +186,8 @@ def index(request):
         # age = request.POST.get("age") # получение значения поля age
         #return HttpResponse("<h2>Hello, {0}</h2>".format(name))
         #return HttpResponse("<h2>date_From, {0}</h2>".format(date_From))
-        return HttpResponse(getContent(unit,date_From, date_To))
+        #return HttpResponse(getContent(unit,date_From, date_To))
+        return render(request, "search/index.html", {"form": userform,"table_content": getContent(unit,date_From, date_To)})
     else:
         userform = UserForm()
         return render(request, "search/index.html", {"form": userform})
