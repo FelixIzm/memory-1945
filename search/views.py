@@ -127,7 +127,7 @@ def getContent(military_unit, date_From, date_To):
                 x=0
                 #f = open("myfile.html", "w")
                 #f.write('<html><table border="1" cellpadding="3">')
-                html_string += '<td>Тип документа</td><td>Содержание</td><td>Период</td><td>Авторы</td><td>Дата документа</td><td>Архив</td><td>Фонд</td><td>Опись</td><td>Дело</td><td>Скан</td>'
+                html_string += '<td>Тип документа</td><td>Содержание</td><td>Период</td><td>Авторы</td><td>Дата документа</td><td>Архив</td><td>Фонд</td><td>Опись</td><td>Дело</td><td>Док</td>'
                 #f.write(head)
                 table_string = Template('<tr><td>${col1}</td><td>${col2}</td><td>${col3}</td><td>${col4}</td><td>${col5}</td><td>${col6}</td><td>${col7}</td><td>${col8}</td><td>${col9}</td><td>${col10}</td></tr>')
 
@@ -143,9 +143,9 @@ def getContent(military_unit, date_From, date_To):
                             #print(hit['_source'])
                             src = hit['_source']
                             data_string = table_string.safe_substitute(col1=src['document_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],
-                            #col10='<a href=https://cdn.pamyat-naroda.ru/imageloadfull/'+src['image_path']+'>Скан</a>')
                             col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+'>Док</a>')
-                            "https://pamyat-naroda.ru/documents/view/?id=156069047
+                            #col10='<a href=https://cdn.pamyat-naroda.ru/imageloadfull/'+src['image_path']+'>Скан</a>')
+                            #"https://pamyat-naroda.ru/documents/view/?id=156069047
                             #f.write(data_string)
                             html_string += data_string
                     x+=divisor
@@ -158,10 +158,10 @@ def getContent(military_unit, date_From, date_To):
                     hits = data['hits']['hits']
                     for hit in hits:
                         src = hit['_source']
-                        data_string = table_string.safe_substitute(col1=src['document_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['delo'],col9=src['opis'],
+                        data_string = table_string.safe_substitute(col1=src['document_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],
+                        col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+'>Док</a>')
                         #col10='<a href=https://cdn.pamyat-naroda.ru/imageloadfull/'+src['image_path']+'>Скан</a>')
                         #col10='<input value="scan" onclick="window.open(\'https://cdn.pamyat-naroda.ru/imageloadfull/'+ src['image_path']+'\')" type="button">')
-                        col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+'>Док</a>')
 
                         #f.write(data_string)
                         html_string += data_string
