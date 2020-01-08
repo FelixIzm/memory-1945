@@ -46,7 +46,7 @@ def getContent(military_unit, date_From, date_To):
     ##############################################
     #    Первый запрос - получаем 307 статус     #
     ##############################################
-    html_string = '<html><table class="table">'
+    html_string = '<html><table class="blueTable">'
     headers = parse_file(BASE_DIR+'/mu_files/mu_header1.txt')
     cookies = parse_file(BASE_DIR+'/mu_files/mu_cookie1.txt')
     url = 'https://pamyat-naroda.ru/'
@@ -127,9 +127,9 @@ def getContent(military_unit, date_From, date_To):
                 x=0
                 #f = open("myfile.html", "w")
                 #f.write('<html><table border="1" cellpadding="3">')
-                html_string += '<tr class="row header blue"><th>Тип документа</th><th>Содержание</th><th>Период</th><th>Авторы</th><th>Дата документа</th><th>Архив</th><th>Фонд</th><th>Опись</th><th>Дело</th><th>Док</th></tr>'
+                html_string += '<tr><th>Тип документа</th><th>Содержание</th><th>Период</th><th>Авторы</th><th>Дата документа</th><th>Архив</th><th>Фонд</th><th>Опись</th><th>Дело</th><th>Док</th></tr>'
                 #f.write(head)
-                table_string = Template('<tr class="row header"><td class="cell">${col1}</td><td class="cell">${col2}</td><td class="cell">${col3}</td><td class="cell">${col4}</td><td class="cell">${col5}</td><td class="cell">${col6}</td><td class="cell">${col7}</td><td class="cell">${col8}</td><td class="cell">${col9}</td><td class="cell">${col10}</td></tr>')
+                table_string = Template('<tr><td>${col1}</td><td>${col2}</td><td>${col3}</td><td>${col4}</td><td>${col5}</td><td>${col6}</td><td>${col7}</td><td>${col8}</td><td>${col9}</td><td>${col10}</td></tr>')
 
                 while(x< one*divisor):
                     #print(divisor, x, total)
