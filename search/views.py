@@ -128,6 +128,7 @@ def getContent(military_unit, date_From, date_To):
                 #f = open("myfile.html", "w")
                 #f.write('<html><table border="1" cellpadding="3">')
                 html_string += '<thead><tr><th>Тип документа</th><th>Содержание</th><th>Период</th><th>Авторы</th><th>Дата документа</th><th>Архив</th><th>Фонд</th><th>Опись</th><th>Дело</th><th>Док</th></tr></thead>'
+                html_string += '<tbody>'
                 #f.write(head)
                 table_string = Template('<tr><td>${col1}</td><td>${col2}</td><td>${col3}</td><td>${col4}</td><td>${col5}</td><td>${col6}</td><td>${col7}</td><td>${col8}</td><td>${col9}</td><td>${col10}</td></tr>')
 
@@ -166,7 +167,7 @@ def getContent(military_unit, date_From, date_To):
                         #f.write(data_string)
                         html_string += data_string
                 #f.write('</table></html>')
-                html_string+='</table></html>'
+                html_string+='</tbody></table></html>'
                 #f.close()
     return(html_string)
 
