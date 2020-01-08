@@ -16,8 +16,10 @@
 
     <form method="POST">
         {% csrf_token %}
+    <table>
         {{ form }}
     <input type="submit" value="Send" ><br/><br/>
+    </table>
     {{ table_content|safe }}
 
   </form>
