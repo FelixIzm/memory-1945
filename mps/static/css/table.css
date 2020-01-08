@@ -1,4 +1,11 @@
-﻿table.blueTable {
+﻿body {
+  font-family: "Helvetica Neue", Helvetica, Arial;
+  font-size: 12px;
+  padding-top: 12px;
+  padding-left: 5px;
+}
+
+table.blueTable {
   border: 1px solid #1C6EA4;
   background-color: #EEEEEE;
   width: 100%;
