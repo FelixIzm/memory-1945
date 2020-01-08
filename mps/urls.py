@@ -21,7 +21,7 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
-    #url(r'^favicon\.ico$',RedirectView.as_view(url='/favicon.ico'), name='favicon'),
+    url(r'^favicon\.ico$',RedirectView.as_view(url='/favicon.ico'), name='favicon'),
     path('', include('search.urls')),
 
 ]
