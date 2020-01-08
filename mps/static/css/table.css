@@ -3,7 +3,7 @@
   font-size: 12px;
   padding-top: 12px;
   padding-left: 7px;
-  padding-left: 7px;
+  padding-right: 7px;
 }
 
 table.blueTable {
@@ -12,6 +12,7 @@ table.blueTable {
   width: 100%;
   text-align: left;
   border-collapse: collapse;
+  padding-top: 12px;
 }
 table.blueTable td, table.blueTable th {
   border: 1px solid #AAAAAA;
