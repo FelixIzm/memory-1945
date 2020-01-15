@@ -18,6 +18,7 @@ str_00 = 'bda88568a54f922fcdfc6dbf940e5d00'
 str_0b = '56105c9ab348522591eea18fbe4d080b'
 str_PNSESSIONID = 'PNSESSIONID'
 unit = '1256 гап'
+search_count = -9999
 
 #####################################
 def parse_file (name_file):
@@ -51,6 +52,8 @@ def getContent(military_unit, date_From, date_To):
     cookies = parse_file(BASE_DIR+'/mu_files/mu_cookie1.txt')
     url = 'https://pamyat-naroda.ru/'
     res1 = requests.get(url, allow_redirects=False)
+    global search_count
+    search_count = 0
     if(res1.status_code==307):
         #print('*********  1  **********')
         #print(res1.status_code)
@@ -140,6 +143,7 @@ def getContent(military_unit, date_From, date_To):
                     if(res4.status_code==200):
                         data = json.loads(res4.text)
                         hits = data['hits']['hits']
+                        search_count += len(hits)
                         for hit in hits:
                             #print(hit['_source'])
                             src = hit['_source']
@@ -157,6 +161,7 @@ def getContent(military_unit, date_From, date_To):
                 if(res4.status_code==200):
                     data = json.loads(res4.text)
                     hits = data['hits']['hits']
+                    search_count += len(hits)
                     for hit in hits:
                         src = hit['_source']
                         data_string = table_string.safe_substitute(col1=src['document_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],
@@ -176,7 +181,6 @@ def getContent(military_unit, date_From, date_To):
 
 def index(request):
     if request.method == "POST":
-        userform = UserForm()
         unit = request.POST.get("unit")
         str_date_From = request.POST.get("date_From")
         str_date_To = request.POST.get("date_To")
@@ -188,7 +192,8 @@ def index(request):
         #return HttpResponse("<h2>Hello, {0}</h2>".format(name))
         #return HttpResponse("<h2>date_From, {0}</h2>".format(date_From))
         #return HttpResponse(getContent(unit,date_From, date_To))
-        return render(request, "search/index.html", {"form": userform,"table_content": getContent(unit,date_From, date_To)})
+        userform = UserForm({'unit':unit,'date_From': str_date_From, 'date_To':str_date_To})
+        return render(request, "search/index.html", {"form": userform,'search_count':'Найдено: '+str(search_count),"table_content": getContent(unit,date_From, date_To)})
     else:
         userform = UserForm()
         return render(request, "search/index.html", {"form": userform})
