@@ -77,13 +77,11 @@ def getContent(military_unit, date_From, date_To):
         res2 = requests.get(url,cookies=cookies,headers=headers,allow_redirects = True)
         #######################################
         if(res2.status_code==200):
-            #print(res2.status_code)
-            #print(res2.cookies[str_00])
+            print(res2.status_code)
+            print(res2.cookies[str_00])
             ###########################################
             ##############   3-й запрос   #############
             ###########################################
-            #print('')
-            #print("*********  3  **********")
             cookies = parse_json_file(BASE_DIR+'/mu_files/mu_cookie3.txt')
             cookies[str_00] = res2.cookies[str_00]
             cookies[str_0b] = res1.cookies[str_0b]
