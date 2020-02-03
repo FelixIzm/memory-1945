@@ -151,8 +151,12 @@ def getContent(military_unit, date_From, date_To):
                             #f.write(data_string)
                             html_string += data_string
                     x+=divisor
+                print("size = ",two)
+                print("para_from = ",x)
+                
                 data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=two,para_from=x)
                 url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
+                print("data_ = ",data_)
                 res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers)
                 print('4.3 ********************** ',res4.status_code)
                 if(res4.status_code==200):
