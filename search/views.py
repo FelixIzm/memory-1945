@@ -143,8 +143,8 @@ def getContent(military_unit, date_From, date_To):
                             print("src")
                             src = hit['_source']
                             print("data_string")
-                            #data_string = table_string.safe_substitute(col1=src['docment_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+' target="_blank">Док</a>')
-                            print("html_string")
+                            data_string = table_string.safe_substitute(col1=src['docment_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],col10='')
+                            print("html_string = ",html_string)
                             html_string += data_string
                         print("end if")
                     else:
@@ -157,7 +157,6 @@ def getContent(military_unit, date_From, date_To):
                 data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=two,para_from=x)
                 url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
                 res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers)
-                print('4.3 ********************** ',res4.status_code)
                 if(res4.status_code==200):
                     data = json.loads(res4.text)
                     hits = data['hits']['hits']
@@ -165,12 +164,8 @@ def getContent(military_unit, date_From, date_To):
                     for hit in hits:
                         src = hit['_source']
                         data_string = table_string.safe_substitute(col1=src['document_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+' target="_blank">Док</a>')
-                print('count = ',search_count)
                 #f.write('</table></html>')
                 html_string+='</tbody></table></html>'
-                print('***********************************')
-                print(html_string)
-                print('***********************************')
                 #f.close()
     return(html_string)
 
