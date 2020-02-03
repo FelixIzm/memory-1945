@@ -170,7 +170,7 @@ def getContent(military_unit, date_From, date_To):
 
                         #f.write(data_string)
                         html_string += data_string
-                    #print('count = '+search_count)
+                print('count = ',search_count)
                 #f.write('</table></html>')
                 html_string+='</tbody></table></html>'
                 #f.close()
