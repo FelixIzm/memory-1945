@@ -167,6 +167,7 @@ def getContent(military_unit, date_From, date_To):
                 print('para_from = ',x)
                 print("********************************")
                 if(res4.status_code==200):
+                    print('res4.text = ',res4.text)
                     data = json.loads(res4.text)
                     hits = data['hits']['hits']
                     search_count += len(hits)
@@ -179,6 +180,7 @@ def getContent(military_unit, date_From, date_To):
 
                         #f.write(data_string)
                         html_string += data_string
+                        print(html_string)
                 print('count = ',search_count)
                 #f.write('</table></html>')
                 html_string+='</tbody></table></html>'
@@ -206,7 +208,9 @@ def index(request):
         #return HttpResponse("<h2>date_From, {0}</h2>".format(date_From))
         #return HttpResponse(getContent(unit,date_From, date_To))
         userform = UserForm({'unit':unit,'date_From': str_date_From, 'date_To':str_date_To})
+        print('*************** 1 *****************')
         return render(request, "search/index.html", {"form": userform,'search_count':'Найдено: '+str(search_count),"table_content": getContent(unit,date_From, date_To)})
+        print('*************** 2 *****************')
     else:
         userform = UserForm()
         return render(request, "search/index.html", {"form": userform})
