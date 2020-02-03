@@ -128,7 +128,8 @@ def getContent(military_unit, date_From, date_To):
                 html_string += '<thead><tr><th>Тип документа</th><th>Содержание</th><th>Период</th><th>Авторы</th><th>Дата документа</th><th>Архив</th><th>Фонд</th><th>Опись</th><th>Дело</th><th>Док</th></tr></thead>'
                 html_string += '<tbody>'
                 table_string = Template('<tr><td>${col1}</td><td>${col2}</td><td>${col3}</td><td>${col4}</td><td>${col5}</td><td>${col6}</td><td>${col7}</td><td>${col8}</td><td>${col9}</td><td>${col10}</td></tr>')
-
+                print('4.1.1 ********************** ',res4.status_code)
+                print("4.1.2 ****************************")
                 while(x< one*divisor):
                     #print(divisor, x, total)
                     data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=divisor,para_from=x)
@@ -150,7 +151,6 @@ def getContent(military_unit, date_From, date_To):
                             #f.write(data_string)
                             html_string += data_string
                     x+=divisor
-                print('html_strin_1 = ',html_string)
                 data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=two,para_from=x)
                 url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
                 res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers)
