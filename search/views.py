@@ -170,8 +170,6 @@ def getContent(military_unit, date_From, date_To):
                     data = json.loads(res4.text)
                     hits = data['hits']['hits']
                     search_count += len(hits)
-                    print('len[hits] - ',len(hits))
-                    print('***********************************')
                     for hit in hits:
                         src = hit['_source']
                         data_string = table_string.safe_substitute(col1=src['document_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],
@@ -184,6 +182,9 @@ def getContent(military_unit, date_From, date_To):
                 print('count = ',search_count)
                 #f.write('</table></html>')
                 html_string+='</tbody></table></html>'
+                print('***********************************')
+                print(html_string)
+                print('***********************************')
                 #f.close()
     return(html_string)
 
