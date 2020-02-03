@@ -100,6 +100,7 @@ def getContent(military_unit, date_From, date_To):
             ############## 4-й запрос #############
             print('')
             print('*********  4  ************')
+            ############## 4-й запрос #############
             headers=parse_file(BASE_DIR+'/mu_files/mu_header4.txt')
             headers['Content-Type'] = 'application/json'
             headers['Origin']='https://pamyat-naroda.ru'
@@ -116,6 +117,9 @@ def getContent(military_unit, date_From, date_To):
             data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=10,para_from=0)
             url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
             res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers)
+            print("********************************")
+            print('res4.status_code = ',res4.status_code)
+            print("********************************")
             if(res4.status_code==200):
                 data = json.loads(res4.text)
                 total = data['hits']['total']
