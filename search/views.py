@@ -143,11 +143,6 @@ def getContent(military_unit, date_From, date_To):
                     data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=divisor,para_from=x)
                     url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
                     res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers)
-                    print("********************************")
-                    print('res4.status_code = ',res4.status_code)
-                    print('size = ',divisor)
-                    print('para_from = ',x)
-                    print("********************************")
                     if(res4.status_code==200):
                         data = json.loads(res4.text)
                         hits = data['hits']['hits']
@@ -166,6 +161,11 @@ def getContent(military_unit, date_From, date_To):
                 data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=two,para_from=x)
                 url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
                 res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers)
+                print("********************************")
+                print('res4.status_code = ',res4.status_code)
+                print('size = ',two)
+                print('para_from = ',x)
+                print("********************************")
                 if(res4.status_code==200):
                     data = json.loads(res4.text)
                     hits = data['hits']['hits']
