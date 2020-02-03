@@ -156,17 +156,9 @@ def getContent(military_unit, date_From, date_To):
                 res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers)
                 print('4.3 ********************** ',res4.status_code)
                 if(res4.status_code==200):
-                    try:
-                        data = json.loads(res4.text)
-                    except ValueError as e:
-                        print("json.loads ", e)
-                       
+                    data = json.loads(res4.text)
                     hits = data['hits']['hits']
-                    try:
-                        search_count += len(hits)
-                    except ValueError as e:
-                        print("search_count += len(hits) ",e)
-
+                    search_count += len(hits)
                     for hit in hits:
                         src = hit['_source']
                         print("src = ",src)
