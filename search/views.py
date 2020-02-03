@@ -98,8 +98,8 @@ def getContent(military_unit, date_From, date_To):
             print(res3.status_code)
             print(res3.cookies[str_00])
             ############## 4-й запрос #############
-            #print('')
-            #print('*********  4  ************')
+            print('')
+            print('*********  4  ************')
             headers=parse_file(BASE_DIR+'/mu_files/mu_header4.txt')
             headers['Content-Type'] = 'application/json'
             headers['Origin']='https://pamyat-naroda.ru'
