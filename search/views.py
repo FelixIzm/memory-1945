@@ -116,7 +116,7 @@ def getContent(military_unit, date_From, date_To):
 
             data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=220,para_from=0)
             url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
-            res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers)
+            res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers,allow_redirects = True)
             print('4.1 ********************** ',res4.status_code)
             if(res4.status_code==200):
                 data = json.loads(res4.text)
@@ -134,16 +134,20 @@ def getContent(military_unit, date_From, date_To):
                     print('divisor  ****************************')
                     data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=divisor,para_from=x)
                     url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
-                    res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers)
+                    res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers,allow_redirects = True)
                     print('4.2 ********************** ',res4.status_code)
                     if(res4.status_code==200):
                         data = json.loads(res4.text)
                         hits = data['hits']['hits']
                         search_count += len(hits)
+                        print("len(hits) = ",len(hits))
                         for hit in hits:
                             #print(hit['_source'])
+                            print("src")
                             src = hit['_source']
+                            print("data_string")
                             data_string = table_string.safe_substitute(col1=src['docment_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+' target="_blank">Док</a>')
+                            print("html_string")
                             html_string += data_string
                         print("end if")
                     else:
