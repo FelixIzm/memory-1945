@@ -186,7 +186,11 @@ def getContent(military_unit, date_From, date_To):
                         #col10='<input value="scan" onclick="window.open(\'https://cdn.pamyat-naroda.ru/imageloadfull/'+ src['image_path']+'\')" type="button">')
 
                         #f.write(data_string)
-                        html_string += data_string
+                        try:
+                            html_string += data_string
+                        except ValueError as e:
+                            print('data_string = ',data_string)
+                            print('html_string = ',e)
                 print('count = ',search_count)
                 #f.write('</table></html>')
                 html_string+='</tbody></table></html>'
