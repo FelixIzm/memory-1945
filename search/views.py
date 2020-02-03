@@ -122,18 +122,11 @@ def getContent(military_unit, date_From, date_To):
                 data = json.loads(res4.text)
                 total = data['hits']['total']
                 hits = data['hits']['hits']
-                #print(hits[0]['_source'])
-                #for key, value in hits[0].items():
-                #    print (key, value)
                 divisor = 100
-                one, two =divmod (total,divisor)
-                #print(one, two)
+                one, two = divmod(total,divisor)
                 x=0
-                #f = open("myfile.html", "w")
-                #f.write('<html><table border="1" cellpadding="3">')
                 html_string += '<thead><tr><th>Тип документа</th><th>Содержание</th><th>Период</th><th>Авторы</th><th>Дата документа</th><th>Архив</th><th>Фонд</th><th>Опись</th><th>Дело</th><th>Док</th></tr></thead>'
                 html_string += '<tbody>'
-                #f.write(head)
                 table_string = Template('<tr><td>${col1}</td><td>${col2}</td><td>${col3}</td><td>${col4}</td><td>${col5}</td><td>${col6}</td><td>${col7}</td><td>${col8}</td><td>${col9}</td><td>${col10}</td></tr>')
 
                 while(x< one*divisor):
@@ -157,7 +150,7 @@ def getContent(military_unit, date_From, date_To):
                             #f.write(data_string)
                             html_string += data_string
                     x+=divisor
-                #print(two, x)
+                print('html_strin_1 = ',html_string)
                 data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=two,para_from=x)
                 url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
                 res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers)
