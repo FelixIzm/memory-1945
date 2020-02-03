@@ -117,9 +117,6 @@ def getContent(military_unit, date_From, date_To):
             data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=10,para_from=0)
             url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
             res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers)
-            print("********************************")
-            print('res4.status_code = ',res4.status_code)
-            print("********************************")
             if(res4.status_code==200):
                 data = json.loads(res4.text)
                 total = data['hits']['total']
@@ -163,15 +160,15 @@ def getContent(military_unit, date_From, date_To):
                 res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers)
                 print("********************************")
                 print('res4.status_code = ',res4.status_code)
-                print('size = ',two)
-                print('para_from = ',x)
-                print("********************************")
                 if(res4.status_code==200):
                     data = json.loads(res4.text)
                     hits = data['hits']['hits']
                     search_count += len(hits)
+                    print('len[hits]',len(hits))
+                    print("********************************")
                     for hit in hits:
                         src = hit['_source']
+                        print('id = ',hit['_id'])
                         data_string = table_string.safe_substitute(col1=src['document_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],
                         col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+' target="_blank">Док</a>')
                         #col10='<a href=https://cdn.pamyat-naroda.ru/imageloadfull/'+src['image_path']+'>Скан</a>')
