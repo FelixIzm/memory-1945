@@ -77,7 +77,7 @@ def getContent(military_unit, date_From, date_To):
         res2 = requests.get(url,cookies=cookies,headers=headers,allow_redirects = True)
         #######################################
         if(res2.status_code==200):
-            print(res2.status_code)
+            #print(res2.status_code)
             #print(res2.cookies[str_00])
             ###########################################
             ##############   3-й запрос   #############
@@ -99,7 +99,7 @@ def getContent(military_unit, date_From, date_To):
             #print(res3.cookies[str_00])
             ############## 4-й запрос #############
             print('')
-            print('*********  4  ************')
+            print('4  ************')
             ############## 4-й запрос #############
             headers=parse_file(BASE_DIR+'/mu_files/mu_header4.txt')
             headers['Content-Type'] = 'application/json'
@@ -117,7 +117,6 @@ def getContent(military_unit, date_From, date_To):
             data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=220,para_from=0)
             url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
             res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers,allow_redirects = True)
-            print('4.1 ********************** ',res4.status_code)
             if(res4.status_code==200):
                 data = json.loads(res4.text)
                 total = data['hits']['total']
@@ -129,9 +128,7 @@ def getContent(military_unit, date_From, date_To):
                 html_string += '<tbody>'
                 table_string = Template('<tr><td>${col1}</td><td>${col2}</td><td>${col3}</td><td>${col4}</td><td>${col5}</td><td>${col6}</td><td>${col7}</td><td>${col8}</td><td>${col9}</td><td>${col10}</td></tr>')
                 while(x< one*divisor):
-                    print('divisor  ****************************')
-                    print(divisor, x, total)
-                    print('divisor  ****************************')
+                    print('divisor  **************************** ', divisor, x, total)
                     data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=divisor,para_from=x)
                     url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
                     res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers,allow_redirects = True)
@@ -146,7 +143,7 @@ def getContent(military_unit, date_From, date_To):
                             print("src")
                             src = hit['_source']
                             print("data_string")
-                            data_string = table_string.safe_substitute(col1=src['docment_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+' target="_blank">Док</a>')
+                            #data_string = table_string.safe_substitute(col1=src['docment_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+' target="_blank">Док</a>')
                             print("html_string")
                             html_string += data_string
                         print("end if")
@@ -167,11 +164,7 @@ def getContent(military_unit, date_From, date_To):
                     search_count += len(hits)
                     for hit in hits:
                         src = hit['_source']
-                        print("src = ",src)
                         data_string = table_string.safe_substitute(col1=src['document_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+' target="_blank">Док</a>')
-                        print('data_string = ',data_string)
-                        #html_string += data_string
-                        print('html_string = ',html_string)
                 print('count = ',search_count)
                 #f.write('</table></html>')
                 html_string+='</tbody></table></html>'
@@ -193,10 +186,6 @@ def index(request):
         tmp_date_To = datetime.strptime(str_date_To,'%d.%m.%Y')
         date_From = tmp_date_From.strftime('%Y-%-m-%-d')
         date_To = tmp_date_To.strftime('%Y-%-m-%-d')
-        print('*************************')
-        print('date_From = ',date_From)
-        print('date_To = ',date_To)
-        print('*************************')
         # age = request.POST.get("age") # получение значения поля age
         #return HttpResponse("<h2>Hello, {0}</h2>".format(name))
         #return HttpResponse("<h2>date_From, {0}</h2>".format(date_From))
