@@ -98,8 +98,6 @@ def getContent(military_unit, date_From, date_To):
             #print(res3.status_code)
             #print(res3.cookies[str_00])
             ############## 4-й запрос #############
-            print('')
-            print('4  ************')
             ############## 4-й запрос #############
             headers=parse_file(BASE_DIR+'/mu_files/mu_header4.txt')
             headers['Content-Type'] = 'application/json'
@@ -128,33 +126,18 @@ def getContent(military_unit, date_From, date_To):
                 html_string += '<tbody>'
                 table_string = Template('<tr><td>${col1}</td><td>${col2}</td><td>${col3}</td><td>${col4}</td><td>${col5}</td><td>${col6}</td><td>${col7}</td><td>${col8}</td><td>${col9}</td><td>${col10}</td></tr>')
                 while(x< one*divisor):
-                    print('divisor  **************************** ', divisor, x, total)
                     data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=divisor,para_from=x)
                     url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
                     res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers,allow_redirects = True)
-                    print('4.2 ********************** ',res4.status_code)
                     if(res4.status_code==200):
                         data = json.loads(res4.text)
                         hits = data['hits']['hits']
                         search_count += len(hits)
-                        print("len(hits) = ",len(hits))
                         for hit in hits:
-                            #print(hit['_source'])
-                            print("src")
                             src = hit['_source']
-                            print("data_string")
-
-                            data_string = table_string.safe_substitute(col1=src['document_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],col10='')
-
-                            print("html_string = ",html_string)
+                            data_string = table_string.safe_substitute(col1=src['document_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+' target="_blank">Док</a>')
                             html_string += data_string
-                        print("end if")
-                    else:
-                        print('4.2 else ********************** ',res4.status_code)
-                        print(data_)
                     x+=divisor
-                print("size = ",two)
-                print("para_from = ",x)
                 
                 data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=two,para_from=x)
                 url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
@@ -188,9 +171,7 @@ def index(request):
         #return HttpResponse("<h2>date_From, {0}</h2>".format(date_From))
         #return HttpResponse(getContent(unit,date_From, date_To))
         userform = UserForm({'unit':unit,'date_From': str_date_From, 'date_To':str_date_To})
-        print('*************** 1 *****************')
         return render(request, "search/index.html", {"form": userform,'search_count':'Найдено: '+str(search_count),"table_content": getContent(unit,date_From, date_To)})
-        print('*************** 2 *****************')
     else:
         userform = UserForm()
         return render(request, "search/index.html", {"form": userform})
