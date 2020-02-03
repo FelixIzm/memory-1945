@@ -188,6 +188,10 @@ def index(request):
         tmp_date_To = datetime.strptime(str_date_To,'%d.%m.%Y')
         date_From = tmp_date_From.strftime('%Y-%m-%d')
         date_To = tmp_date_To.strftime('%Y-%m-%d')
+        print('*************************')
+        print('date_From = ',date_From)
+        print('date_To = ',date_To)
+        print('*************************')
         # age = request.POST.get("age") # получение значения поля age
         #return HttpResponse("<h2>Hello, {0}</h2>".format(name))
         #return HttpResponse("<h2>date_From, {0}</h2>".format(date_From))
