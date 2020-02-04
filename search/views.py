@@ -148,6 +148,7 @@ def getContent(military_unit, date_From, date_To):
                     search_count += len(hits)
                     for hit in hits:
                         src = hit['_source']
+                        count+=1
                         data_string = table_string.safe_substitute(cnt=str(count),col1=src['document_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+' target="_blank">Док</a>')
                         html_string += data_string
                         
