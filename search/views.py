@@ -126,6 +126,7 @@ def getContent(military_unit, date_From, date_To):
                 one, two = divmod(total,divisor)
                 x=0
                 count=0
+                logger.debug('total = ',total)
                 html_string += '<thead><tr><th>N</th><th>Тип документа</th><th>Содержание</th><th>Период</th><th>Авторы</th><th>Дата документа</th><th>Архив</th><th>Фонд</th><th>Опись</th><th>Дело</th><th>Док</th></tr></thead>'
                 html_string += '<tbody>'
                 table_string = Template('<tr><td>${cnt}</td><td>${col1}</td><td>${col2}</td><td>${col3}</td><td>${col4}</td><td>${col5}</td><td>${col6}</td><td>${col7}</td><td>${col8}</td><td>${col9}</td><td>${col10}</td></tr>')
