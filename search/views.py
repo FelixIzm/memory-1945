@@ -130,6 +130,25 @@ def getContent(military_unit, date_From, date_To):
                 html_string += '<thead><tr><th>N</th><th>Тип документа</th><th>Содержание</th><th>Период</th><th>Авторы</th><th>Дата документа</th><th>Архив</th><th>Фонд</th><th>Опись</th><th>Дело</th><th>Док</th></tr></thead>'
                 html_string += '<tbody>'
                 table_string = Template('<tr><td>${cnt}</td><td>${col1}</td><td>${col2}</td><td>${col3}</td><td>${col4}</td><td>${col5}</td><td>${col6}</td><td>${col7}</td><td>${col8}</td><td>${col9}</td><td>${col10}</td></tr>')
+
+                start=0
+                stop=total
+                step = 100
+                for i in range(start,stop,step):
+                    data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=divisor,para_from=x)
+                    url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
+                    res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers,allow_redirects = True)
+                    if(res4.status_code==200):
+                        data = json.loads(res4.text)
+                        hits = data['hits']['hits']
+                        search_count += len(hits)
+                        for hit in hits:
+                            src = hit['_source']
+                            count+=1
+                            logger.log(count)
+                            data_string = table_string.safe_substitute(cnt=str(count),col1=src['document_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+' target="_blank">Док</a>')
+                            html_string += data_string
+'''
                 while(x< one*divisor):
                     data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=divisor,para_from=x)
                     url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
@@ -158,7 +177,7 @@ def getContent(military_unit, date_From, date_To):
                         count+=1
                         data_string = table_string.safe_substitute(cnt=str(count),col1=src['document_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+' target="_blank">Док</a>')
                         html_string += data_string
-                        
+            '''            
                 html_string+='</tbody></table></html>'
     return(html_string)
 
