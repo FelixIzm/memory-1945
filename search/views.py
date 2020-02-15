@@ -126,6 +126,7 @@ def getContent(military_unit, date_From, date_To):
             if(res4.status_code==200):
                 data = json.loads(res4.text)
                 total = data['hits']['total']
+                search_count = total
                 hits = data['hits']['hits']
                 divisor = 100
                 one, two = divmod(total,divisor)
@@ -148,10 +149,10 @@ def getContent(military_unit, date_From, date_To):
                     if(res4.status_code==200):
                         data = json.loads(res4.text)
                         hits = data['hits']['hits']
-                        search_count += len(hits)
+                        #search_count += len(hits)
                         for hit in hits:
                             src = hit['_source']
-                            print(type(src['date_from']))
+                            #print(type(src['date_from']))
                             count+=1
                             data_string = table_string.safe_substitute(cnt=count,col1=checkType(src['document_type']),col2=checkType(src['document_name']),col3=checkType(src['date_from'])+'-'+checkType(src['date_to']),col4=checkType(src['authors']),col5=checkType(src['document_date_f']),col6=checkType(src['archive']),col7=checkType(src['fond']),col8=checkType(src['opis']),col9=checkType(src['delo']),col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+' target="_blank">Док</a>')
                             html_string += data_string
@@ -174,7 +175,7 @@ def getContent(military_unit, date_From, date_To):
                             data_string = table_string.safe_substitute(cnt=str(count),col1=src['document_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+' target="_blank">Док</a>')
                             html_string += data_string
                     x+=divisor
-                
+
                 data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=two,para_from=x)
                 url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
                 res4 = requests.post(url4,data=data_.encode('utf-8'),headers=headers)
@@ -187,12 +188,13 @@ def getContent(military_unit, date_From, date_To):
                         count+=1
                         data_string = table_string.safe_substitute(cnt=str(count),col1=src['document_type'],col2=src['document_name'],col3=src['date_from']+'-'+src['date_to'],col4=src['authors'],col5=src['document_date_f'],col6=src['archive'],col7=src['fond'],col8=src['opis'],col9=src['delo'],col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+' target="_blank">Док</a>')
                         html_string += data_string
-            '''            
+            '''
 
 
 
 
 def index(request):
+    global search_count
     if request.method == "POST":
         unit = request.POST.get("unit")
         str_date_From = request.POST.get("date_From")
@@ -210,7 +212,8 @@ def index(request):
         #return HttpResponse("<h2>date_From, {0}</h2>".format(date_From))
         #return HttpResponse(getContent(unit,date_From, date_To))
         userform = UserForm({'unit':unit,'date_From': str_date_From, 'date_To':str_date_To})
-        return render(request, "search/index.html", {"form": userform,'search_count':'Найдено: '+str(search_count),"table_content": getContent(unit,date_From, date_To)})
+        table = getContent(unit,date_From, date_To)
+        return render(request, "search/index.html", {"form": userform,'search_count':'Найдено: '+str(search_count),"table_content": table})
     else:
         userform = UserForm()
         return render(request, "search/index.html", {"form": userform})
