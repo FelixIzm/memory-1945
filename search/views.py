@@ -172,8 +172,12 @@ def index(request):
         str_date_To = request.POST.get("date_To")
         tmp_date_From = datetime.strptime(str_date_From,'%d.%m.%Y')
         tmp_date_To = datetime.strptime(str_date_To,'%d.%m.%Y')
-        date_From = tmp_date_From.strftime('%Y-%-m-%-d')
-        date_To = tmp_date_To.strftime('%Y-%-m-%-d')
+        if(os.name == "nt"):
+                date_From = tmp_date_From.strftime('%Y-%m-%d')
+                date_To = tmp_date_To.strftime('%Y-%m-%d')
+        else:
+                date_From = tmp_date_From.strftime('%Y-%-m-%-d')
+                date_To = tmp_date_To.strftime('%Y-%-m-%-d')
         # age = request.POST.get("age") # получение значения поля age
         #return HttpResponse("<h2>Hello, {0}</h2>".format(name))
         #return HttpResponse("<h2>date_From, {0}</h2>".format(date_From))
