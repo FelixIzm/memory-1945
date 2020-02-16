@@ -7,6 +7,8 @@ from .forms import UserForm
 from datetime import datetime
 import os
 import logging
+from openpyxl import Workbook
+
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -87,8 +89,8 @@ def getContent(military_unit, date_From, date_To):
         res2 = requests.get(url,cookies=cookies,headers=headers,allow_redirects = True)
         #######################################
         if(res2.status_code==200):
-            print(res2.status_code)
-            print(res2.cookies[str_00])
+            #print(res2.status_code)
+            #print(res2.cookies[str_00])
             ###########################################
             ##############   3-й запрос   #############
             ###########################################
@@ -141,7 +143,7 @@ def getContent(military_unit, date_From, date_To):
                 stop=10
                 step = 100
                 for i in range(start,stop,step):
-                    print(i,start, stop, step)
+                    #print(i,start, stop, step)
                     data_ = data_t.safe_substitute(start_date=date_From,finish_date=date_To, military_unit=military_unit,size=step,_from=i)
                     #print(data)
                     url4 = 'https://cdn.pamyat-naroda.ru/data/'+a_bs+'/'+b_bs+'/pamyat/document,map,magazine/_search'
@@ -150,14 +152,28 @@ def getContent(military_unit, date_From, date_To):
                         data = json.loads(res4.text)
                         hits = data['hits']['hits']
                         #search_count += len(hits)
+                        result_array = []
                         for hit in hits:
                             src = hit['_source']
-                            #print(type(src['date_from']))
+                            dict_record = {}
                             count+=1
-                            data_string = table_string.safe_substitute(cnt=count,col1=checkType(src['document_type']),col2=checkType(src['document_name']),col3=checkType(src['date_from'])+'-'+checkType(src['date_to']),col4=checkType(src['authors']),col5=checkType(src['document_date_f']),col6=checkType(src['archive']),col7=checkType(src['fond']),col8=checkType(src['opis']),col9=checkType(src['delo']),col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+' target="_blank">Док</a>')
+                            data_string = table_string.safe_substitute(cnt=count,col1=checkType(src['document_type']),col2=checkType(src['document_name']),col3=checkType(src['date_from'])+'_'+checkType(src['date_to']),col4=checkType(src['authors']),col5=checkType(src['document_date_f']),col6=checkType(src['archive']),col7=checkType(src['fond']),col8=checkType(src['opis']),col9=checkType(src['delo']),col10='<a href=https://pamyat-naroda.ru/documents/view/?id='+hit['_id']+' target="_blank">Док</a>')
+                            dict_record['cnt'] = count
+                            dict_record['document_type'] = checkType(src['document_type'])
+                            dict_record['document_name'] = checkType(src['document_name'])
+                            dict_record['period'] = checkType(src['date_from'])+'_'+checkType(src['date_to'])
+                            dict_record['authors'] = checkType(src['authors'])
+                            dict_record['document_date_f'] = checkType(src['document_date_f'])
+                            dict_record['archive'] = checkType(src['archive'])
+                            dict_record['fond'] = checkType(src['fond'])
+                            dict_record['opis'] = checkType(src['opis'])
+                            dict_record['delo'] = checkType(src['delo'])
+                            dict_record['link'] = 'https://pamyat-naroda.ru/documents/view/?id='+hit['_id']
+                            result_array.append(dict_record)
+
                             html_string += data_string
                 html_string+='</tbody></table></html>'
-    return(html_string)
+    return(html_string, result_array)
 
 '''
                 while(x< one*divisor):
@@ -196,24 +212,80 @@ def getContent(military_unit, date_From, date_To):
 def index(request):
     global search_count
     if request.method == "POST":
+
         unit = request.POST.get("unit")
         str_date_From = request.POST.get("date_From")
         str_date_To = request.POST.get("date_To")
         tmp_date_From = datetime.strptime(str_date_From,'%d.%m.%Y')
         tmp_date_To = datetime.strptime(str_date_To,'%d.%m.%Y')
         if(os.name == "nt"):
-                date_From = tmp_date_From.strftime('%Y-%m-%d')
-                date_To = tmp_date_To.strftime('%Y-%m-%d')
+            date_From = tmp_date_From.strftime('%Y-%m-%d')
+            date_To = tmp_date_To.strftime('%Y-%m-%d')
         else:
-                date_From = tmp_date_From.strftime('%Y-%-m-%-d')
-                date_To = tmp_date_To.strftime('%Y-%-m-%-d')
+            date_From = tmp_date_From.strftime('%Y-%-m-%-d')
+            date_To = tmp_date_To.strftime('%Y-%-m-%-d')
         # age = request.POST.get("age") # получение значения поля age
         #return HttpResponse("<h2>Hello, {0}</h2>".format(name))
         #return HttpResponse("<h2>date_From, {0}</h2>".format(date_From))
         #return HttpResponse(getContent(unit,date_From, date_To))
         userform = UserForm({'unit':unit,'date_From': str_date_From, 'date_To':str_date_To})
-        table = getContent(unit,date_From, date_To)
-        return render(request, "search/index.html", {"form": userform,'search_count':'Найдено: '+str(search_count),"table_content": table})
+        table, arr = getContent(unit,date_From, date_To)
+        if 'SaveData' in request.POST:
+            #print(arr)
+            response = HttpResponse(
+                content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            )
+            response['Content-Disposition'] = 'attachment; filename={date}-movies.xlsx'.format(
+                date=datetime.now().strftime('%Y-%m-%d'),
+            )
+            workbook = Workbook()
+            
+            # Get active worksheet/tab
+            worksheet = workbook.active
+            worksheet.title = 'Movies'
+            columns = [
+                'ID',
+                'Тип документа',
+                'Содержание',
+                'Период',
+                'Авторы',
+                'Дата документа',
+                'Архив',
+                'Фонд',
+                'Опист',
+                'Дело',
+                'Документ',
+            ]
+            row_num = 1
+
+            # Assign the titles for each cell of the header
+            for col_num, column_title in enumerate(columns, 1):
+                cell = worksheet.cell(row=row_num, column=col_num)
+                cell.value = column_title
+
+            for rec in arr:
+                row_num += 1
+                row = [
+                    rec.get('cnt'),
+                    rec.get('document_type'),
+                    rec.get('document_name'),
+                    rec.get('period'),
+                    rec.get('authors'),
+                    rec.get('document_date_f'),
+                    rec.get('archive'),
+                    rec.get('fond'),
+                    rec.get('opis'),
+                    rec.get('delo'),
+                    rec.get('link'),
+                ]
+                for col_num, cell_value in enumerate(row, 1):
+                    cell = worksheet.cell(row=row_num, column=col_num)
+                    cell.value = cell_value
+            workbook.save(response)
+            return response
+            #return
+        else:
+            return render(request, "search/index.html", {"form": userform,'search_count':'Найдено: '+str(search_count),"table_content": table})
     else:
         userform = UserForm()
         return render(request, "search/index.html", {"form": userform})
